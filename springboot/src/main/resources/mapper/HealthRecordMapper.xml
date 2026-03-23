@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.HealthRecordMapper">
+
+    <!-- 基础字段映射 -->
+    <resultMap id="BaseResultMap" type="com.example.entity.HealthRecord">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="blood_type" property="bloodType"/>
+        <result column="height" property="height"/>
+        <result column="weight" property="weight"/>
+        <result column="chronic_disease" property="chronicDisease"/>
+        <result column="emergency_contact" property="emergencyContact"/>
+        <result column="emergency_phone" property="emergencyPhone"/>
+        <result column="medical_history" property="medicalHistory"/>
+        <result column="drug_allergies" property="drugAllergies"/>
+        <result column="physical_examination" property="physicalExamination"/>
+        <result column="medical_records" property="medicalRecords"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+    
+    <!-- 所有字段 -->
+    <sql id="Base_Column_List">
+        id, user_id, blood_type, height, weight, chronic_disease, emergency_contact, emergency_phone, 
+        medical_history, drug_allergies, physical_examination, medical_records, create_time, update_time
+    </sql>
+    
+    <!-- 新增健康档案 -->
+    <insert id="insert" parameterType="com.example.entity.HealthRecord" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO health_record (
+            user_id, blood_type, height, weight, chronic_disease, emergency_contact, emergency_phone,
+            medical_history, drug_allergies, physical_examination, medical_records, create_time, update_time
+        ) VALUES (
+            #{userId}, #{bloodType}, #{height}, #{weight}, #{chronicDisease}, #{emergencyContact}, #{emergencyPhone},
+            #{medicalHistory}, #{drugAllergies}, #{physicalExamination}, #{medicalRecords}, now(), now()
+        )
+    </insert>
+    
+    <!-- 根据ID删除健康档案 -->
+    <delete id="deleteById" parameterType="java.lang.Integer">
+        DELETE FROM health_record WHERE id = #{id}
+    </delete>
+    
+    <!-- 批量删除健康档案 -->
+    <delete id="deleteBatch" parameterType="java.util.List">
+        DELETE FROM health_record WHERE id IN
+        <foreach collection="list" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+    <!-- 更新健康档案 -->
+    <update id="update" parameterType="com.example.entity.HealthRecord">
+        UPDATE health_record
+        <set>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="bloodType != null">blood_type = #{bloodType},</if>
+            <if test="height != null">height = #{height},</if>
+            <if test="weight != null">weight = #{weight},</if>
+            <if test="chronicDisease != null">chronic_disease = #{chronicDisease},</if>
+            <if test="emergencyContact != null">emergency_contact = #{emergencyContact},</if>
+            <if test="emergencyPhone != null">emergency_phone = #{emergencyPhone},</if>
+            <if test="medicalHistory != null">medical_history = #{medicalHistory},</if>
+            <if test="drugAllergies != null">drug_allergies = #{drugAllergies},</if>
+            <if test="physicalExamination != null">physical_examination = #{physicalExamination},</if>
+            <if test="medicalRecords != null">medical_records = #{medicalRecords},</if>
+            update_time = now()
+        </set>
+        WHERE id = #{id}
+    </update>
+    
+    <!-- 根据ID查询健康档案 -->
+    <select id="selectById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM health_record
+        WHERE id = #{id}
+    </select>
+    
+    <!-- 根据用户ID查询健康档案 -->
+    <select id="selectByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM health_record
+        WHERE user_id = #{userId}
+    </select>
+    
+    <!-- 查询所有健康档案（可带条件） -->
+    <select id="selectAll" parameterType="com.example.entity.HealthRecord" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM health_record
+        <where>
+            <if test="userId != null">AND user_id = #{userId}</if>
+            <if test="bloodType != null">AND blood_type = #{bloodType}</if>
+            <if test="chronicDisease != null">AND chronic_disease LIKE CONCAT('%', #{chronicDisease}, '%')</if>
+            <if test="emergencyContact != null">AND emergency_contact LIKE CONCAT('%', #{emergencyContact}, '%')</if>
+            <if test="emergencyPhone != null">AND emergency_phone LIKE CONCAT('%', #{emergencyPhone}, '%')</if>
+        </where>
+        ORDER BY update_time DESC
+    </select>
+    
+    <!-- 分页查询健康档案 -->
+    <select id="selectPage" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM health_record
+        <where>
+            <if test="healthRecord.userId != null">AND user_id = #{healthRecord.userId}</if>
+            <if test="healthRecord.bloodType != null">AND blood_type = #{healthRecord.bloodType}</if>
+            <if test="healthRecord.chronicDisease != null">AND chronic_disease LIKE CONCAT('%', #{healthRecord.chronicDisease}, '%')</if>
+            <if test="healthRecord.emergencyContact != null">AND emergency_contact LIKE CONCAT('%', #{healthRecord.emergencyContact}, '%')</if>
+            <if test="healthRecord.emergencyPhone != null">AND emergency_phone LIKE CONCAT('%', #{healthRecord.emergencyPhone}, '%')</if>
+        </where>
+        ORDER BY update_time DESC
+    </select>
+
+</mapper> 

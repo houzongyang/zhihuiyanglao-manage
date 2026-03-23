@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.CheckinRecordMapper">
+
+    <!-- 基础结果映射 -->
+    <resultMap id="BaseResultMap" type="com.example.entity.CheckinRecord">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="room_number" property="roomNumber"/>
+        <result column="checkin_date" property="checkinDate"/>
+        <result column="checkout_date" property="checkoutDate"/>
+        <result column="checkin_status" property="checkinStatus"/>
+        <result column="monthly_fee" property="monthlyFee"/>
+        <result column="deposit" property="deposit"/>
+        <result column="total_paid" property="totalPaid"/>
+        <result column="payment_status" property="paymentStatus"/>
+        <result column="room_type" property="roomType"/>
+        <result column="bed_number" property="bedNumber"/>
+        <result column="special_needs" property="specialNeeds"/>
+        <result column="emergency_contact" property="emergencyContact"/>
+        <result column="emergency_phone" property="emergencyPhone"/>
+        <result column="remarks" property="remarks"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="created_by" property="createdBy"/>
+        <!-- 关联的用户名 -->
+        <result column="name" property="userName"/>
+    </resultMap>
+
+    <!-- 通用查询字段 -->
+    <sql id="Base_Column_List">
+        cr.id, cr.user_id, cr.room_number, cr.checkin_date, cr.checkout_date, cr.checkin_status, 
+        cr.monthly_fee, cr.deposit, cr.total_paid, cr.payment_status, cr.room_type, cr.bed_number, 
+        cr.special_needs, cr.emergency_contact, cr.emergency_phone, cr.remarks, 
+        cr.create_time, cr.update_time, cr.created_by, u.name
+    </sql>
+
+    <!-- 查询条件 -->
+    <sql id="whereClause">
+        <where>
+            <if test="roomNumber != null and roomNumber != ''">
+                AND cr.room_number LIKE CONCAT('%', #{roomNumber}, '%')
+            </if>
+            <if test="checkinStatus != null and checkinStatus != ''">
+                AND cr.checkin_status = #{checkinStatus}
+            </if>
+        </where>
+    </sql>
+
+    <!-- 新增入住记录 -->
+    <insert id="insert" parameterType="com.example.entity.CheckinRecord" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO checkin_record (
+            user_id, room_number, checkin_date, checkout_date, checkin_status,
+            monthly_fee, deposit, total_paid, payment_status, room_type, bed_number,
+            special_needs, emergency_contact, emergency_phone, remarks, created_by
+        ) VALUES (
+            #{userId}, #{roomNumber}, #{checkinDate}, #{checkoutDate}, #{checkinStatus},
+            #{monthlyFee}, #{deposit}, #{totalPaid}, #{paymentStatus}, #{roomType}, #{bedNumber},
+            #{specialNeeds}, #{emergencyContact}, #{emergencyPhone}, #{remarks}, #{createdBy}
+        )
+    </insert>
+
+    <!-- 根据ID删除入住记录 -->
+    <delete id="deleteById">
+        DELETE FROM checkin_record WHERE id = #{id}
+    </delete>
+
+    <!-- 批量删除入住记录 -->
+    <delete id="deleteBatch">
+        DELETE FROM checkin_record WHERE id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!-- 更新入住记录 -->
+    <update id="updateById" parameterType="com.example.entity.CheckinRecord">
+        UPDATE checkin_record
+        <set>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="roomNumber != null">room_number = #{roomNumber},</if>
+            <if test="checkinDate != null">checkin_date = #{checkinDate},</if>
+            <if test="checkoutDate != null">checkout_date = #{checkoutDate},</if>
+            <if test="checkinStatus != null">checkin_status = #{checkinStatus},</if>
+            <if test="monthlyFee != null">monthly_fee = #{monthlyFee},</if>
+            <if test="deposit != null">deposit = #{deposit},</if>
+            <if test="totalPaid != null">total_paid = #{totalPaid},</if>
+            <if test="paymentStatus != null">payment_status = #{paymentStatus},</if>
+            <if test="roomType != null">room_type = #{roomType},</if>
+            <if test="bedNumber != null">bed_number = #{bedNumber},</if>
+            <if test="specialNeeds != null">special_needs = #{specialNeeds},</if>
+            <if test="emergencyContact != null">emergency_contact = #{emergencyContact},</if>
+            <if test="emergencyPhone != null">emergency_phone = #{emergencyPhone},</if>
+            <if test="remarks != null">remarks = #{remarks},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <!-- 根据ID查询入住记录 -->
+    <select id="selectById" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM checkin_record cr
+        LEFT JOIN user u ON cr.user_id = u.id
+        WHERE cr.id = #{id}
+    </select>
+
+    <!-- 查询所有入住记录 -->
+    <select id="selectAll" resultMap="BaseResultMap" parameterType="com.example.entity.CheckinRecord">
+        SELECT <include refid="Base_Column_List"/>
+        FROM checkin_record cr
+        LEFT JOIN user u ON cr.user_id = u.id
+        <include refid="whereClause"/>
+        ORDER BY cr.id DESC
+    </select>
+
+    <!-- 分页查询入住记录 -->
+    <select id="selectPage" resultMap="BaseResultMap" parameterType="com.example.entity.CheckinRecord">
+        SELECT <include refid="Base_Column_List"/>
+        FROM checkin_record cr
+        LEFT JOIN user u ON cr.user_id = u.id
+        <include refid="whereClause"/>
+        ORDER BY cr.id DESC
+    </select>
+
+</mapper> 

@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.CareRecordMapper">
+
+    <!-- 结果映射 -->
+    <resultMap id="BaseResultMap" type="com.example.entity.CareRecord">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="user_id" property="userId" jdbcType="INTEGER"/>
+        <result column="nurse_id" property="nurseId" jdbcType="INTEGER"/>
+        <result column="care_assignment_id" property="careAssignmentId" jdbcType="INTEGER"/>
+        <result column="record_date" property="recordDate" jdbcType="DATE"/>
+        <result column="care_type" property="careType" jdbcType="VARCHAR"/>
+        <result column="care_content" property="careContent" jdbcType="LONGVARCHAR"/>
+        <result column="blood_pressure" property="bloodPressure" jdbcType="VARCHAR"/>
+        <result column="heart_rate" property="heartRate" jdbcType="VARCHAR"/>
+        <result column="temperature" property="temperature" jdbcType="VARCHAR"/>
+        <result column="diet_record" property="dietRecord" jdbcType="LONGVARCHAR"/>
+        <result column="exercise_record" property="exerciseRecord" jdbcType="LONGVARCHAR"/>
+        <result column="mood_status" property="moodStatus" jdbcType="VARCHAR"/>
+        <result column="abnormal_situation" property="abnormalSituation" jdbcType="LONGVARCHAR"/>
+        <result column="remarks" property="remarks" jdbcType="LONGVARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!-- 扩展结果映射（包含关联查询字段） -->
+    <resultMap id="ExtendedResultMap" type="com.example.entity.CareRecord" extends="BaseResultMap">
+        <result column="user_name" property="userName" jdbcType="VARCHAR"/>
+        <result column="nurse_name" property="nurseName" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!-- 基础字段列表 -->
+    <sql id="Base_Column_List">
+        id, user_id, nurse_id, care_assignment_id, record_date, care_type, care_content,
+        blood_pressure, heart_rate, temperature, diet_record, exercise_record,
+        mood_status, abnormal_situation, remarks, create_time, update_time
+    </sql>
+
+    <!-- 扩展字段列表（包含关联查询字段） -->
+    <sql id="Extended_Column_List">
+        cr.id, cr.user_id, cr.nurse_id, cr.care_assignment_id, cr.record_date, cr.care_type, cr.care_content,
+        cr.blood_pressure, cr.heart_rate, cr.temperature, cr.diet_record, cr.exercise_record,
+        cr.mood_status, cr.abnormal_situation, cr.remarks, cr.create_time, cr.update_time,
+        u.name as user_name,
+        n.name as nurse_name
+    </sql>
+
+    <!-- 新增护理记录 -->
+    <insert id="insert" parameterType="com.example.entity.CareRecord">
+        insert into care_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="nurseId != null">nurse_id,</if>
+            <if test="careAssignmentId != null">care_assignment_id,</if>
+            <if test="recordDate != null">record_date,</if>
+            <if test="careType != null">care_type,</if>
+            <if test="careContent != null">care_content,</if>
+            <if test="bloodPressure != null">blood_pressure,</if>
+            <if test="heartRate != null">heart_rate,</if>
+            <if test="temperature != null">temperature,</if>
+            <if test="dietRecord != null">diet_record,</if>
+            <if test="exerciseRecord != null">exercise_record,</if>
+            <if test="moodStatus != null">mood_status,</if>
+            <if test="abnormalSituation != null">abnormal_situation,</if>
+            <if test="remarks != null">remarks,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId,jdbcType=INTEGER},</if>
+            <if test="nurseId != null">#{nurseId,jdbcType=INTEGER},</if>
+            <if test="careAssignmentId != null">#{careAssignmentId,jdbcType=INTEGER},</if>
+            <if test="recordDate != null">#{recordDate,jdbcType=DATE},</if>
+            <if test="careType != null">#{careType,jdbcType=VARCHAR},</if>
+            <if test="careContent != null">#{careContent,jdbcType=LONGVARCHAR},</if>
+            <if test="bloodPressure != null">#{bloodPressure,jdbcType=VARCHAR},</if>
+            <if test="heartRate != null">#{heartRate,jdbcType=VARCHAR},</if>
+            <if test="temperature != null">#{temperature,jdbcType=VARCHAR},</if>
+            <if test="dietRecord != null">#{dietRecord,jdbcType=LONGVARCHAR},</if>
+            <if test="exerciseRecord != null">#{exerciseRecord,jdbcType=LONGVARCHAR},</if>
+            <if test="moodStatus != null">#{moodStatus,jdbcType=VARCHAR},</if>
+            <if test="abnormalSituation != null">#{abnormalSituation,jdbcType=LONGVARCHAR},</if>
+            <if test="remarks != null">#{remarks,jdbcType=LONGVARCHAR},</if>
+        </trim>
+    </insert>
+
+    <!-- 根据ID删除护理记录 -->
+    <delete id="deleteById" parameterType="java.lang.Integer">
+        delete from care_record where id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <!-- 批量删除护理记录 -->
+    <delete id="deleteBatch" parameterType="java.util.List">
+        delete from care_record where id in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!-- 修改护理记录 -->
+    <update id="updateById" parameterType="com.example.entity.CareRecord">
+        update care_record
+        <set>
+            <if test="userId != null">user_id = #{userId,jdbcType=INTEGER},</if>
+            <if test="nurseId != null">nurse_id = #{nurseId,jdbcType=INTEGER},</if>
+            <if test="careAssignmentId != null">care_assignment_id = #{careAssignmentId,jdbcType=INTEGER},</if>
+            <if test="recordDate != null">record_date = #{recordDate,jdbcType=DATE},</if>
+            <if test="careType != null">care_type = #{careType,jdbcType=VARCHAR},</if>
+            <if test="careContent != null">care_content = #{careContent,jdbcType=LONGVARCHAR},</if>
+            <if test="bloodPressure != null">blood_pressure = #{bloodPressure,jdbcType=VARCHAR},</if>
+            <if test="heartRate != null">heart_rate = #{heartRate,jdbcType=VARCHAR},</if>
+            <if test="temperature != null">temperature = #{temperature,jdbcType=VARCHAR},</if>
+            <if test="dietRecord != null">diet_record = #{dietRecord,jdbcType=LONGVARCHAR},</if>
+            <if test="exerciseRecord != null">exercise_record = #{exerciseRecord,jdbcType=LONGVARCHAR},</if>
+            <if test="moodStatus != null">mood_status = #{moodStatus,jdbcType=VARCHAR},</if>
+            <if test="abnormalSituation != null">abnormal_situation = #{abnormalSituation,jdbcType=LONGVARCHAR},</if>
+            <if test="remarks != null">remarks = #{remarks,jdbcType=LONGVARCHAR},</if>
+            update_time = CURRENT_TIMESTAMP
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <!-- 根据ID查询护理记录 -->
+    <select id="selectById" parameterType="java.lang.Integer" resultMap="ExtendedResultMap">
+        select 
+        <include refid="Extended_Column_List"/>
+        from care_record cr
+        left join user u on cr.user_id = u.id
+        left join nurse n on cr.nurse_id = n.id
+        where cr.id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <!-- 通用查询条件 -->
+    <sql id="selectCondition">
+        <where>
+            <if test="userId != null">
+                and cr.user_id = #{userId}
+            </if>
+            <if test="nurseId != null">
+                and cr.nurse_id = #{nurseId}
+            </if>
+            <if test="careAssignmentId != null">
+                and cr.care_assignment_id = #{careAssignmentId}
+            </if>
+            <if test="recordDate != null">
+                and cr.record_date = #{recordDate}
+            </if>
+            <if test="startDate != null">
+                and cr.record_date &gt;= #{startDate}
+            </if>
+            <if test="endDate != null">
+                and cr.record_date &lt;= #{endDate}
+            </if>
+            <if test="careType != null and careType != ''">
+                and cr.care_type = #{careType}
+            </if>
+            <if test="moodStatus != null and moodStatus != ''">
+                and cr.mood_status = #{moodStatus}
+            </if>
+        </where>
+    </sql>
+
+    <!-- 查询所有护理记录 -->
+    <select id="selectAll" parameterType="com.example.entity.CareRecord" resultMap="ExtendedResultMap">
+        select 
+        <include refid="Extended_Column_List"/>
+        from care_record cr
+        left join user u on cr.user_id = u.id
+        left join nurse n on cr.nurse_id = n.id
+        <include refid="selectCondition"/>
+        order by cr.create_time desc
+    </select>
+
+    <!-- 分页查询护理记录 -->
+    <select id="selectPage" parameterType="com.example.entity.CareRecord" resultMap="ExtendedResultMap">
+        select 
+        <include refid="Extended_Column_List"/>
+        from care_record cr
+        left join user u on cr.user_id = u.id
+        left join nurse n on cr.nurse_id = n.id
+        <include refid="selectCondition"/>
+        order by cr.create_time desc
+    </select>
+
+</mapper>

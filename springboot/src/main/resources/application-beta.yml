@@ -1,0 +1,22 @@
+server:
+  port: 8080
+
+spring:
+  profiles: beta
+  datasource:
+    url: jdbc:mysql://localhost:3306/xm_association_beta?useSSL=false&serverTimezone=UTC
+    username: beta_user
+    password: beta_pass
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+
+logging:
+  level:
+    root: INFO
+    com.example: DEBUG
+
+app:
+  featureFlags:
+    enableSmartAdvice: true
+    enablePsychEval: false

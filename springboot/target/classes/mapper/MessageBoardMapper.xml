@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.MessageBoardMapper">
+
+    <sql id="Base_Column_List">
+        id,title,content,user_id,user_type,parent_id,status,is_public,is_top,
+        reply_count,view_count,create_time,update_time,created_by,reviewed_by,reviewed_time
+    </sql>
+
+    <select id="selectAll" resultType="com.example.entity.MessageBoard">
+        select
+        <include refid="Base_Column_List" />
+        from message_board
+        <where>
+            <if test="id != null"> and id = #{id}</if>
+            <if test="title != null and title != ''"> and title like concat('%', #{title}, '%')</if>
+            <if test="content != null and content != ''"> and content like concat('%', #{content}, '%')</if>
+            <if test="userId != null"> and user_id = #{userId}</if>
+            <if test="userType != null and userType != ''"> and user_type = #{userType}</if>
+            <if test="parentId != null"> and parent_id = #{parentId}</if>
+            <if test="status != null and status != ''"> and status = #{status}</if>
+            <if test="isPublic != null"> and is_public = #{isPublic}</if>
+            <if test="isTop != null"> and is_top = #{isTop}</if>
+            <if test="createdBy != null and createdBy != ''"> and created_by like concat('%', #{createdBy}, '%')</if>
+            <if test="reviewedBy != null and reviewedBy != ''"> and reviewed_by like concat('%', #{reviewedBy}, '%')</if>
+        </where>
+        order by is_top desc, create_time desc
+    </select>
+
+    <select id="selectById" resultType="com.example.entity.MessageBoard">
+        select
+        <include refid="Base_Column_List" />
+        from message_board
+        where id = #{id}
+    </select>
+
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into message_board
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null">title,</if>
+            <if test="content != null">content,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="userType != null">user_type,</if>
+            <if test="parentId != null">parent_id,</if>
+            <if test="status != null">status,</if>
+            <if test="isPublic != null">is_public,</if>
+            <if test="isTop != null">is_top,</if>
+            <if test="replyCount != null">reply_count,</if>
+            <if test="viewCount != null">view_count,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="createdBy != null">created_by,</if>
+            <if test="reviewedBy != null">reviewed_by,</if>
+            <if test="reviewedTime != null">reviewed_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="title != null">#{title},</if>
+            <if test="content != null">#{content},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="userType != null">#{userType},</if>
+            <if test="parentId != null">#{parentId},</if>
+            <if test="status != null">#{status},</if>
+            <if test="isPublic != null">#{isPublic},</if>
+            <if test="isTop != null">#{isTop},</if>
+            <if test="replyCount != null">#{replyCount},</if>
+            <if test="viewCount != null">#{viewCount},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="createdBy != null">#{createdBy},</if>
+            <if test="reviewedBy != null">#{reviewedBy},</if>
+            <if test="reviewedTime != null">#{reviewedTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateById">
+        update message_board
+        <set>
+            <if test="title != null">title = #{title},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="userType != null">user_type = #{userType},</if>
+            <if test="parentId != null">parent_id = #{parentId},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="isPublic != null">is_public = #{isPublic},</if>
+            <if test="isTop != null">is_top = #{isTop},</if>
+            <if test="replyCount != null">reply_count = #{replyCount},</if>
+            <if test="viewCount != null">view_count = #{viewCount},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="createdBy != null">created_by = #{createdBy},</if>
+            <if test="reviewedBy != null">reviewed_by = #{reviewedBy},</if>
+            <if test="reviewedTime != null">reviewed_time = #{reviewedTime},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        delete from message_board where id = #{id}
+    </delete>
+
+    <select id="selectByStatus" resultType="com.example.entity.MessageBoard">
+        select
+        <include refid="Base_Column_List" />
+        from message_board
+        where status = #{status}
+        order by is_top desc, create_time desc
+    </select>
+
+    <select id="selectByUserType" resultType="com.example.entity.MessageBoard">
+        select
+        <include refid="Base_Column_List" />
+        from message_board
+        where user_type = #{userType}
+        order by is_top desc, create_time desc
+    </select>
+
+    <select id="selectByParentId" resultType="com.example.entity.MessageBoard">
+        select
+        <include refid="Base_Column_List" />
+        from message_board
+        where parent_id = #{parentId}
+        order by create_time asc
+    </select>
+
+    <select id="selectTopMessages" resultType="com.example.entity.MessageBoard">
+        select
+        <include refid="Base_Column_List" />
+        from message_board
+        where is_top = 1 and is_public = 1 and status = 'APPROVED'
+        order by create_time desc
+    </select>
+
+    <select id="selectMainMessages" resultType="com.example.entity.MessageBoard">
+        select
+        <include refid="Base_Column_List" />
+        from message_board
+        where parent_id = 0
+        order by is_top desc, create_time desc
+    </select>
+
+</mapper> 

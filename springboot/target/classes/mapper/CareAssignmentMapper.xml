@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.CareAssignmentMapper">
+
+    <!-- 结果映射 -->
+    <resultMap id="BaseResultMap" type="com.example.entity.CareAssignment">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="user_id" property="userId" jdbcType="INTEGER"/>
+        <result column="nurse_id" property="nurseId" jdbcType="INTEGER"/>
+        <result column="care_plan_id" property="carePlanId" jdbcType="INTEGER"/>
+        <result column="shift_date" property="shiftDate" jdbcType="DATE"/>
+        <result column="start_time" property="startTime" jdbcType="TIME"/>
+        <result column="end_time" property="endTime" jdbcType="TIME"/>
+        <result column="shift_type" property="shiftType" jdbcType="VARCHAR"/>
+        <result column="work_content" property="workContent" jdbcType="LONGVARCHAR"/>
+        <result column="status" property="status" jdbcType="VARCHAR"/>
+        <result column="completion_notes" property="completionNotes" jdbcType="LONGVARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!-- 扩展结果映射（包含关联查询字段） -->
+    <resultMap id="ExtendedResultMap" type="com.example.entity.CareAssignment" extends="BaseResultMap">
+        <result column="user_name" property="userName" jdbcType="VARCHAR"/>
+        <result column="nurse_name" property="nurseName" jdbcType="VARCHAR"/>
+        <result column="care_plan_title" property="carePlanTitle" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!-- 基础字段列表 -->
+    <sql id="Base_Column_List">
+        id, user_id, nurse_id, care_plan_id, shift_date, start_time, end_time, 
+        shift_type, work_content, status, completion_notes, create_time, update_time
+    </sql>
+
+    <!-- 扩展字段列表（包含关联查询字段） -->
+    <sql id="Extended_Column_List">
+        ca.id, ca.user_id, ca.nurse_id, ca.care_plan_id, ca.shift_date, ca.start_time, ca.end_time,
+        ca.shift_type, ca.work_content, ca.status, ca.completion_notes, ca.create_time, ca.update_time,
+        u.name as user_name,
+        n.name as nurse_name,
+        cp.plan_title as care_plan_title
+    </sql>
+
+    <!-- 新增护理安排 -->
+    <insert id="insert" parameterType="com.example.entity.CareAssignment">
+        insert into care_assignment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="nurseId != null">nurse_id,</if>
+            <if test="carePlanId != null">care_plan_id,</if>
+            <if test="shiftDate != null">shift_date,</if>
+            <if test="startTime != null">start_time,</if>
+            <if test="endTime != null">end_time,</if>
+            <if test="shiftType != null">shift_type,</if>
+            <if test="workContent != null">work_content,</if>
+            <if test="status != null">status,</if>
+            <if test="completionNotes != null">completion_notes,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId,jdbcType=INTEGER},</if>
+            <if test="nurseId != null">#{nurseId,jdbcType=INTEGER},</if>
+            <if test="carePlanId != null">#{carePlanId,jdbcType=INTEGER},</if>
+            <if test="shiftDate != null">#{shiftDate,jdbcType=DATE},</if>
+            <if test="startTime != null">#{startTime,jdbcType=TIME},</if>
+            <if test="endTime != null">#{endTime,jdbcType=TIME},</if>
+            <if test="shiftType != null">#{shiftType,jdbcType=VARCHAR},</if>
+            <if test="workContent != null">#{workContent,jdbcType=LONGVARCHAR},</if>
+            <if test="status != null">#{status,jdbcType=VARCHAR},</if>
+            <if test="completionNotes != null">#{completionNotes,jdbcType=LONGVARCHAR},</if>
+        </trim>
+    </insert>
+
+    <!-- 根据ID删除护理安排 -->
+    <delete id="deleteById" parameterType="java.lang.Integer">
+        delete from care_assignment where id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <!-- 批量删除护理安排 -->
+    <delete id="deleteBatch" parameterType="java.util.List">
+        delete from care_assignment where id in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!-- 修改护理安排 -->
+    <update id="updateById" parameterType="com.example.entity.CareAssignment">
+        update care_assignment
+        <set>
+            <if test="userId != null">user_id = #{userId,jdbcType=INTEGER},</if>
+            <if test="nurseId != null">nurse_id = #{nurseId,jdbcType=INTEGER},</if>
+            <if test="carePlanId != null">care_plan_id = #{carePlanId,jdbcType=INTEGER},</if>
+            <if test="shiftDate != null">shift_date = #{shiftDate,jdbcType=DATE},</if>
+            <if test="startTime != null">start_time = #{startTime,jdbcType=TIME},</if>
+            <if test="endTime != null">end_time = #{endTime,jdbcType=TIME},</if>
+            <if test="shiftType != null">shift_type = #{shiftType,jdbcType=VARCHAR},</if>
+            <if test="workContent != null">work_content = #{workContent,jdbcType=LONGVARCHAR},</if>
+            <if test="status != null">status = #{status,jdbcType=VARCHAR},</if>
+            <if test="completionNotes != null">completion_notes = #{completionNotes,jdbcType=LONGVARCHAR},</if>
+            update_time = CURRENT_TIMESTAMP
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <!-- 根据ID查询护理安排 -->
+    <select id="selectById" parameterType="java.lang.Integer" resultMap="ExtendedResultMap">
+        select 
+        <include refid="Extended_Column_List"/>
+        from care_assignment ca
+        left join user u on ca.user_id = u.id
+        left join nurse n on ca.nurse_id = n.id
+        left join care_plan cp on ca.care_plan_id = cp.id
+        where ca.id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <!-- 通用查询条件 -->
+    <sql id="selectCondition">
+        <where>
+            <if test="userId != null">
+                and ca.user_id = #{userId}
+            </if>
+            <if test="nurseId != null">
+                and ca.nurse_id = #{nurseId}
+            </if>
+            <if test="carePlanId != null">
+                and ca.care_plan_id = #{carePlanId}
+            </if>
+            <if test="shiftDate != null">
+                and ca.shift_date = #{shiftDate}
+            </if>
+            <if test="shiftType != null and shiftType != ''">
+                and ca.shift_type = #{shiftType}
+            </if>
+            <if test="status != null and status != ''">
+                and ca.status = #{status}
+            </if>
+        </where>
+    </sql>
+
+    <!-- 查询所有护理安排 -->
+    <select id="selectAll" parameterType="com.example.entity.CareAssignment" resultMap="ExtendedResultMap">
+        select 
+        <include refid="Extended_Column_List"/>
+        from care_assignment ca
+        left join user u on ca.user_id = u.id
+        left join nurse n on ca.nurse_id = n.id
+        left join care_plan cp on ca.care_plan_id = cp.id
+        <include refid="selectCondition"/>
+        order by ca.create_time desc
+    </select>
+
+    <!-- 分页查询护理安排 -->
+    <select id="selectPage" parameterType="com.example.entity.CareAssignment" resultMap="ExtendedResultMap">
+        select 
+        <include refid="Extended_Column_List"/>
+        from care_assignment ca
+        left join user u on ca.user_id = u.id
+        left join nurse n on ca.nurse_id = n.id
+        left join care_plan cp on ca.care_plan_id = cp.id
+        <include refid="selectCondition"/>
+        order by ca.create_time desc
+    </select>
+
+</mapper>

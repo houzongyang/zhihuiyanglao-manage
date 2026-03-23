@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 底座 -->
+  <rect x="20" y="85" width="80" height="10" rx="2" fill="#2E7D32"/>
+  
+  <!-- 房子主体 -->
+  <path d="M60 15L20 50H35V85H85V50H100L60 15Z" fill="#4CAF50"/>
+  
+  <!-- 门 -->
+  <rect x="50" y="60" width="20" height="25" rx="2" fill="#2E7D32"/>
+  <circle cx="55" cy="72" r="2" fill="#FFC107"/>
+  
+  <!-- 窗户 -->
+  <rect x="35" y="55" width="10" height="10" rx="1" fill="#E8F5E9"/>
+  <rect x="75" y="55" width="10" height="10" rx="1" fill="#E8F5E9"/>
+  
+  <!-- 屋顶装饰 -->
+  <circle cx="60" cy="30" r="8" fill="#FFC107"/>
+  <path d="M60 26L62 32H58L60 26Z" fill="#FFFFFF"/>
+  
+  <!-- 爱心 -->
+  <path d="M60 45C60 45 55 35 45 35C35 35 35 45 45 50C55 55 60 45 60 45Z" fill="#F44336"/>
+  <path d="M60 45C60 45 65 35 75 35C85 35 85 45 75 50C65 55 60 45 60 45Z" fill="#F44336"/>
+  
+  <!-- 人物剪影 -->
+  <circle cx="45" cy="70" r="5" fill="#90CAF9"/>
+  <path d="M45 75L45 82" stroke="#90CAF9" stroke-width="3" stroke-linecap="round"/>
+  <path d="M40 78L45 75L50 78" stroke="#90CAF9" stroke-width="3" stroke-linecap="round"/>
+  
+  <circle cx="75" cy="70" r="5" fill="#FFB74D"/>
+  <path d="M75 75L75 82" stroke="#FFB74D" stroke-width="3" stroke-linecap="round"/>
+  <path d="M70 78L75 75L80 78" stroke="#FFB74D" stroke-width="3" stroke-linecap="round"/>
+  
+  <!-- 平台文字 -->
+  <path d="M28 100H92" stroke="#2E7D32" stroke-width="2"/>
+  <text x="60" y="110" font-family="Arial" font-size="8" text-anchor="middle" fill="#2E7D32" font-weight="bold">智慧养老服务平台</text>
+</svg>

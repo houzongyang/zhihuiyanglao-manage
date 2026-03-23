@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.UserMedicationMapper">
+
+    <sql id="Base_Column_List">
+        id,user_id,medication_name,medication_type,dosage,frequency,administration_times,
+        meal_relation,start_date,end_date,prescribed_by,prescription_date,purpose,
+        special_instructions,side_effects,status,stop_reason,remarks,create_time,update_time,created_by
+    </sql>
+
+    <select id="selectAll" resultType="com.example.entity.UserMedication">
+        select
+        <include refid="Base_Column_List" />
+        from user_medication
+        <where>
+            <if test="id != null"> and id = #{id}</if>
+            <if test="userId != null"> and user_id = #{userId}</if>
+            <if test="medicationName != null"> and medication_name like concat('%', #{medicationName}, '%')</if>
+            <if test="medicationType != null"> and medication_type = #{medicationType}</if>
+            <if test="dosage != null"> and dosage like concat('%', #{dosage}, '%')</if>
+            <if test="frequency != null"> and frequency like concat('%', #{frequency}, '%')</if>
+            <if test="administrationTimes != null"> and administration_times like concat('%', #{administrationTimes}, '%')</if>
+            <if test="mealRelation != null"> and meal_relation = #{mealRelation}</if>
+            <if test="startDate != null"> and start_date = #{startDate}</if>
+            <if test="endDate != null"> and end_date = #{endDate}</if>
+            <if test="prescribedBy != null"> and prescribed_by like concat('%', #{prescribedBy}, '%')</if>
+            <if test="prescriptionDate != null"> and prescription_date = #{prescriptionDate}</if>
+            <if test="purpose != null"> and purpose like concat('%', #{purpose}, '%')</if>
+            <if test="specialInstructions != null"> and special_instructions like concat('%', #{specialInstructions}, '%')</if>
+            <if test="sideEffects != null"> and side_effects like concat('%', #{sideEffects}, '%')</if>
+            <if test="status != null"> and status = #{status}</if>
+            <if test="stopReason != null"> and stop_reason like concat('%', #{stopReason}, '%')</if>
+            <if test="remarks != null"> and remarks like concat('%', #{remarks}, '%')</if>
+            <if test="createTime != null"> and create_time = #{createTime}</if>
+            <if test="updateTime != null"> and update_time = #{updateTime}</if>
+            <if test="createdBy != null"> and created_by = #{createdBy}</if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="selectById" resultType="com.example.entity.UserMedication">
+        select
+        <include refid="Base_Column_List" />
+        from user_medication
+        where id = #{id}
+    </select>
+
+    <delete id="deleteById">
+        delete from user_medication
+        where id = #{id}
+    </delete>
+
+    <insert id="insert" parameterType="com.example.entity.UserMedication" useGeneratedKeys="true" keyProperty="id">
+        insert into user_medication
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="medicationName != null">medication_name,</if>
+            <if test="medicationType != null">medication_type,</if>
+            <if test="dosage != null">dosage,</if>
+            <if test="frequency != null">frequency,</if>
+            <if test="administrationTimes != null">administration_times,</if>
+            <if test="mealRelation != null">meal_relation,</if>
+            <if test="startDate != null">start_date,</if>
+            <if test="endDate != null">end_date,</if>
+            <if test="prescribedBy != null">prescribed_by,</if>
+            <if test="prescriptionDate != null">prescription_date,</if>
+            <if test="purpose != null">purpose,</if>
+            <if test="specialInstructions != null">special_instructions,</if>
+            <if test="sideEffects != null">side_effects,</if>
+            <if test="status != null">status,</if>
+            <if test="stopReason != null">stop_reason,</if>
+            <if test="remarks != null">remarks,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="createdBy != null">created_by,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="medicationName != null">#{medicationName},</if>
+            <if test="medicationType != null">#{medicationType},</if>
+            <if test="dosage != null">#{dosage},</if>
+            <if test="frequency != null">#{frequency},</if>
+            <if test="administrationTimes != null">#{administrationTimes},</if>
+            <if test="mealRelation != null">#{mealRelation},</if>
+            <if test="startDate != null">#{startDate},</if>
+            <if test="endDate != null">#{endDate},</if>
+            <if test="prescribedBy != null">#{prescribedBy},</if>
+            <if test="prescriptionDate != null">#{prescriptionDate},</if>
+            <if test="purpose != null">#{purpose},</if>
+            <if test="specialInstructions != null">#{specialInstructions},</if>
+            <if test="sideEffects != null">#{sideEffects},</if>
+            <if test="status != null">#{status},</if>
+            <if test="stopReason != null">#{stopReason},</if>
+            <if test="remarks != null">#{remarks},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="createdBy != null">#{createdBy},</if>
+        </trim>
+    </insert>
+
+    <update id="updateById" parameterType="com.example.entity.UserMedication">
+        update user_medication
+        <set>
+            <if test="userId != null">
+                user_id = #{userId},
+            </if>
+            <if test="medicationName != null">
+                medication_name = #{medicationName},
+            </if>
+            <if test="medicationType != null">
+                medication_type = #{medicationType},
+            </if>
+            <if test="dosage != null">
+                dosage = #{dosage},
+            </if>
+            <if test="frequency != null">
+                frequency = #{frequency},
+            </if>
+            <if test="administrationTimes != null">
+                administration_times = #{administrationTimes},
+            </if>
+            <if test="mealRelation != null">
+                meal_relation = #{mealRelation},
+            </if>
+            <if test="startDate != null">
+                start_date = #{startDate},
+            </if>
+            <if test="endDate != null">
+                end_date = #{endDate},
+            </if>
+            <if test="prescribedBy != null">
+                prescribed_by = #{prescribedBy},
+            </if>
+            <if test="prescriptionDate != null">
+                prescription_date = #{prescriptionDate},
+            </if>
+            <if test="purpose != null">
+                purpose = #{purpose},
+            </if>
+            <if test="specialInstructions != null">
+                special_instructions = #{specialInstructions},
+            </if>
+            <if test="sideEffects != null">
+                side_effects = #{sideEffects},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="stopReason != null">
+                stop_reason = #{stopReason},
+            </if>
+            <if test="remarks != null">
+                remarks = #{remarks},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="createdBy != null">
+                created_by = #{createdBy},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+</mapper>

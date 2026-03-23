@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.HealthMonitoringMapper">
+
+    <sql id="Base_Column_List">
+        id, user_id, record_date, record_time, body_temperature, systolic_pressure, diastolic_pressure,
+        heart_rate, blood_sugar, blood_sugar_type, blood_oxygen, weight, sleep_hours, sleep_quality,
+        mood_status, physical_activity, abnormal_symptoms, measured_by, remarks, create_time, update_time
+    </sql>
+
+    <select id="selectAll" resultType="com.example.entity.HealthMonitoring">
+        select
+        <include refid="Base_Column_List" />
+        from health_monitoring
+        <where>
+            <if test="id != null"> and id = #{id}</if>
+            <if test="userId != null"> and user_id = #{userId}</if>
+            <if test="recordDate != null"> and record_date = #{recordDate}</if>
+            <if test="measuredBy != null and measuredBy != ''"> and measured_by like concat('%', #{measuredBy}, '%')</if>
+            <if test="abnormalSymptoms != null and abnormalSymptoms != ''"> and abnormal_symptoms like concat('%', #{abnormalSymptoms}, '%')</if>
+        </where>
+        order by record_date desc, record_time desc
+    </select>
+
+    <select id="selectPageWithUserName" resultType="com.example.entity.HealthMonitoring">
+        select h.*, u.name as userName
+        from health_monitoring h
+        left join user u on h.user_id = u.id
+        <where>
+            <if test="id != null"> and h.id = #{id}</if>
+            <if test="userId != null"> and h.user_id = #{userId}</if>
+            <if test="recordDate != null"> and h.record_date = #{recordDate}</if>
+            <if test="measuredBy != null and measuredBy != ''"> and h.measured_by like concat('%', #{measuredBy}, '%')</if>
+            <if test="abnormalSymptoms != null and abnormalSymptoms != ''"> and h.abnormal_symptoms like concat('%', #{abnormalSymptoms}, '%')</if>
+            <if test="userName != null and userName != ''"> and u.name like concat('%', #{userName}, '%')</if>
+        </where>
+        order by h.record_date desc, h.record_time desc
+    </select>
+
+    <select id="selectById" resultType="com.example.entity.HealthMonitoring">
+        select
+        <include refid="Base_Column_List" />
+        from health_monitoring
+        where id = #{id}
+    </select>
+
+    <select id="selectByUserIdAndDate" resultType="com.example.entity.HealthMonitoring">
+        select
+        <include refid="Base_Column_List" />
+        from health_monitoring
+        where user_id = #{userId} and record_date = #{date}
+        order by record_time desc
+    </select>
+
+    <select id="getDateListByMonth" resultType="java.util.Map">
+        select 
+            DATE_FORMAT(record_date, '%Y-%m-%d') as date,
+            count(*) as recordCount
+        from health_monitoring
+        where user_id = #{userId}
+        and DATE_FORMAT(record_date, '%Y-%m') = #{month}
+        group by record_date
+        order by record_date desc
+    </select>
+
+    <select id="getStats" resultType="java.util.Map">
+        select 
+            (select count(*) from health_monitoring where DATE(create_time) = CURDATE()) as todayCount,
+            (select count(*) from health_monitoring where YEARWEEK(create_time) = YEARWEEK(NOW())) as weekCount,
+            (select count(*) from health_monitoring where abnormal_symptoms is not null and abnormal_symptoms != '') as abnormalCount,
+            (select count(*) from health_monitoring) as totalCount
+    </select>
+
+    <select id="selectLatestByUserId" resultType="com.example.entity.HealthMonitoring">
+        select
+        <include refid="Base_Column_List" />
+        from health_monitoring
+        where user_id = #{userId}
+        order by record_date desc, record_time desc
+        limit 1
+    </select>
+
+    <delete id="deleteById">
+        delete from health_monitoring
+        where id = #{id}
+    </delete>
+
+    <insert id="insert" parameterType="com.example.entity.HealthMonitoring" useGeneratedKeys="true" keyProperty="id">
+        insert into health_monitoring
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="recordDate != null">record_date,</if>
+            <if test="recordTime != null">record_time,</if>
+            <if test="bodyTemperature != null">body_temperature,</if>
+            <if test="systolicPressure != null">systolic_pressure,</if>
+            <if test="diastolicPressure != null">diastolic_pressure,</if>
+            <if test="heartRate != null">heart_rate,</if>
+            <if test="bloodSugar != null">blood_sugar,</if>
+            <if test="bloodSugarType != null">blood_sugar_type,</if>
+            <if test="bloodOxygen != null">blood_oxygen,</if>
+            <if test="weight != null">weight,</if>
+            <if test="sleepHours != null">sleep_hours,</if>
+            <if test="sleepQuality != null">sleep_quality,</if>
+            <if test="moodStatus != null">mood_status,</if>
+            <if test="physicalActivity != null">physical_activity,</if>
+            <if test="abnormalSymptoms != null">abnormal_symptoms,</if>
+            <if test="measuredBy != null">measured_by,</if>
+            <if test="remarks != null">remarks,</if>
+            create_time,
+            update_time
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="recordDate != null">#{recordDate},</if>
+            <if test="recordTime != null">#{recordTime},</if>
+            <if test="bodyTemperature != null">#{bodyTemperature},</if>
+            <if test="systolicPressure != null">#{systolicPressure},</if>
+            <if test="diastolicPressure != null">#{diastolicPressure},</if>
+            <if test="heartRate != null">#{heartRate},</if>
+            <if test="bloodSugar != null">#{bloodSugar},</if>
+            <if test="bloodSugarType != null">#{bloodSugarType},</if>
+            <if test="bloodOxygen != null">#{bloodOxygen},</if>
+            <if test="weight != null">#{weight},</if>
+            <if test="sleepHours != null">#{sleepHours},</if>
+            <if test="sleepQuality != null">#{sleepQuality},</if>
+            <if test="moodStatus != null">#{moodStatus},</if>
+            <if test="physicalActivity != null">#{physicalActivity},</if>
+            <if test="abnormalSymptoms != null">#{abnormalSymptoms},</if>
+            <if test="measuredBy != null">#{measuredBy},</if>
+            <if test="remarks != null">#{remarks},</if>
+            now(),
+            now()
+        </trim>
+    </insert>
+
+    <update id="updateById" parameterType="com.example.entity.HealthMonitoring">
+        update health_monitoring
+        <set>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="recordDate != null">record_date = #{recordDate},</if>
+            <if test="recordTime != null">record_time = #{recordTime},</if>
+            <if test="bodyTemperature != null">body_temperature = #{bodyTemperature},</if>
+            <if test="systolicPressure != null">systolic_pressure = #{systolicPressure},</if>
+            <if test="diastolicPressure != null">diastolic_pressure = #{diastolicPressure},</if>
+            <if test="heartRate != null">heart_rate = #{heartRate},</if>
+            <if test="bloodSugar != null">blood_sugar = #{bloodSugar},</if>
+            <if test="bloodSugarType != null">blood_sugar_type = #{bloodSugarType},</if>
+            <if test="bloodOxygen != null">blood_oxygen = #{bloodOxygen},</if>
+            <if test="weight != null">weight = #{weight},</if>
+            <if test="sleepHours != null">sleep_hours = #{sleepHours},</if>
+            <if test="sleepQuality != null">sleep_quality = #{sleepQuality},</if>
+            <if test="moodStatus != null">mood_status = #{moodStatus},</if>
+            <if test="physicalActivity != null">physical_activity = #{physicalActivity},</if>
+            <if test="abnormalSymptoms != null">abnormal_symptoms = #{abnormalSymptoms},</if>
+            <if test="measuredBy != null">measured_by = #{measuredBy},</if>
+            <if test="remarks != null">remarks = #{remarks},</if>
+            update_time = now()
+        </set>
+        where id = #{id}
+    </update>
+
+</mapper> 

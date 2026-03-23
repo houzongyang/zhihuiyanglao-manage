@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="600" height="400" viewBox="0 0 600 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 养老院建筑 -->
+  <g transform="translate(240, 50) scale(1.5)">
+    <!-- 主体建筑 -->
+    <path d="M20 10L10 30V80H90V30L80 10H20Z" fill="#4CAF50" stroke="#2E7D32" stroke-width="2"/>
+    <!-- 屋顶 -->
+    <path d="M10 30L50 5L90 30" fill="#81C784" stroke="#2E7D32" stroke-width="2"/>
+    <!-- 门 -->
+    <rect x="40" y="50" width="20" height="30" rx="2" fill="#5D4037"/>
+    <circle cx="45" cy="65" r="2" fill="#FFC107"/>
+    <!-- 窗户 -->
+    <rect x="20" y="40" width="15" height="15" rx="1" fill="#E8F5E9" stroke="#2E7D32"/>
+    <rect x="65" y="40" width="15" height="15" rx="1" fill="#E8F5E9" stroke="#2E7D32"/>
+    <rect x="20" y="60" width="15" height="15" rx="1" fill="#E8F5E9" stroke="#2E7D32"/>
+    <rect x="65" y="60" width="15" height="15" rx="1" fill="#E8F5E9" stroke="#2E7D32"/>
+  </g>
+  
+  <!-- 健康监测图表 -->
+  <g transform="translate(180, 150) scale(0.8)">
+    <!-- 图表背景 -->
+    <rect x="20" y="20" width="120" height="80" rx="4" fill="#F5F5F5" stroke="#81C784" stroke-width="2"/>
+    <!-- 心电图线 -->
+    <path d="M30 60H40L45 40L50 80L55 50L60 70L70 60L80 50L90 60L100 40L110 60L120 60" stroke="#4CAF50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- 坐标轴 -->
+    <path d="M30 90H130" stroke="#90A4AE" stroke-width="2"/>
+    <path d="M30 30V90" stroke="#90A4AE" stroke-width="2"/>
+    <!-- 健康图标 -->
+    <circle cx="140" cy="50" r="15" fill="#E8F5E9" stroke="#4CAF50" stroke-width="2"/>
+    <path d="M132 50H148" stroke="#4CAF50" stroke-width="2"/>
+    <path d="M140 42V58" stroke="#4CAF50" stroke-width="2"/>
+  </g>
+  
+  <!-- 老人和护工 -->
+  <g transform="translate(300, 200)">
+    <!-- 老人 -->
+    <circle cx="30" cy="30" r="15" fill="#FFE0B2"/>
+    <path d="M20 25C22 23 28 23 30 25" stroke="#5D4037" stroke-width="1"/>
+    <circle cx="25" cy="22" r="2" fill="#5D4037"/>
+    <circle cx="35" cy="22" r="2" fill="#5D4037"/>
+    <path d="M30 50V80" stroke="#FFE0B2" stroke-width="10" stroke-linecap="round"/>
+    <path d="M30 60L15 70" stroke="#FFE0B2" stroke-width="6" stroke-linecap="round"/>
+    <path d="M30 60L45 70" stroke="#FFE0B2" stroke-width="6" stroke-linecap="round"/>
+    <path d="M20 90L30 80L40 90" stroke="#FFE0B2" stroke-width="6" stroke-linecap="round"/>
+    
+    <!-- 护工 -->
+    <circle cx="70" cy="30" r="15" fill="#BBDEFB"/>
+    <path d="M60 25C62 23 68 23 70 25" stroke="#1565C0" stroke-width="1"/>
+    <circle cx="65" cy="22" r="2" fill="#1565C0"/>
+    <circle cx="75" cy="22" r="2" fill="#1565C0"/>
+    <path d="M70 50V80" stroke="#BBDEFB" stroke-width="10" stroke-linecap="round"/>
+    <path d="M70 60L55 70" stroke="#BBDEFB" stroke-width="6" stroke-linecap="round"/>
+    <path d="M70 60L85 70" stroke="#BBDEFB" stroke-width="6" stroke-linecap="round"/>
+    <path d="M60 90L70 80L80 90" stroke="#BBDEFB" stroke-width="6" stroke-linecap="round"/>
+    
+    <!-- 爱心 -->
+    <path d="M50 40C50 40 45 30 35 30C25 30 25 40 35 45C45 50 50 40 50 40Z" fill="#F44336"/>
+    <path d="M50 40C50 40 55 30 65 30C75 30 75 40 65 45C55 50 50 40 50 40Z" fill="#F44336"/>
+  </g>
+  
+  <!-- 活动日历 -->
+  <g transform="translate(380, 140) scale(0.8)">
+    <!-- 日历背景 -->
+    <rect x="20" y="20" width="120" height="100" rx="4" fill="#FFFFFF" stroke="#4CAF50" stroke-width="2"/>
+    <!-- 日历顶部 -->
+    <rect x="20" y="20" width="120" height="20" rx="4" fill="#4CAF50"/>
+    <text x="80" y="35" font-family="Arial" font-size="12" text-anchor="middle" fill="white">活动日历</text>
+    <!-- 日历格子 -->
+    <path d="M40 40V120" stroke="#E0E0E0" stroke-width="1"/>
+    <path d="M60 40V120" stroke="#E0E0E0" stroke-width="1"/>
+    <path d="M80 40V120" stroke="#E0E0E0" stroke-width="1"/>
+    <path d="M100 40V120" stroke="#E0E0E0" stroke-width="1"/>
+    <path d="M120 40V120" stroke="#E0E0E0" stroke-width="1"/>
+    
+    <path d="M20 60H140" stroke="#E0E0E0" stroke-width="1"/>
+    <path d="M20 80H140" stroke="#E0E0E0" stroke-width="1"/>
+    <path d="M20 100H140" stroke="#E0E0E0" stroke-width="1"/>
+    
+    <!-- 活动标记 -->
+    <rect x="25" y="65" width="10" height="10" rx="2" fill="#FFC107"/>
+    <rect x="65" y="45" width="10" height="10" rx="2" fill="#F44336"/>
+    <rect x="85" y="85" width="10" height="10" rx="2" fill="#2196F3"/>
+    <rect x="105" y="105" width="10" height="10" rx="2" fill="#4CAF50"/>
+  </g>
+  
+  <!-- 装饰元素 - 圆点 -->
+  <circle cx="130" cy="100" r="8" fill="#E8F5E9"/>
+  <circle cx="150" cy="80" r="5" fill="#C8E6C9"/>
+  <circle cx="120" cy="120" r="3" fill="#A5D6A7"/>
+  
+  <circle cx="450" cy="90" r="6" fill="#E8F5E9"/>
+  <circle cx="470" cy="110" r="4" fill="#C8E6C9"/>
+  <circle cx="480" cy="80" r="3" fill="#A5D6A7"/>
+
+  <!-- 装饰线条 -->
+  <path d="M140 330C180 310 220 350 260 330C300 310 340 350 380 330" stroke="#A5D6A7" stroke-width="2" stroke-linecap="round"/>
+</svg>

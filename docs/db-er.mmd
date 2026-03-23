@@ -1,0 +1,111 @@
+erDiagram
+    %% AI智能养老系统 用户角色关系E-R图（论文版）
+    
+    %% 用户与角色模块
+    USER {
+        int id PK "用户ID"
+        string username UK "用户名"
+        string password "密码"
+        string name "姓名"
+        string phone "电话"
+        string email "邮箱"
+        string avatar "头像"
+        enum role "角色(ADMIN,NURSE,ELDERLY)"
+        datetime created_at "创建时间"
+        datetime updated_at "更新时间"
+    }
+    
+    ADMIN {
+        int id PK "管理员ID"
+        int user_id FK "用户ID"
+        string department "部门"
+        string position "职位"
+        string permission_level "权限级别"
+        datetime created_at "创建时间"
+        datetime updated_at "更新时间"
+    }
+    
+    NURSE {
+        int id PK "护士ID"
+        int user_id FK "用户ID"
+        string department "部门"
+        string position "职位"
+        int work_years "工龄"
+        string specialty "专业"
+        string work_schedule "工作日程"
+        datetime created_at "创建时间"
+        datetime updated_at "更新时间"
+    }
+    
+    ELDERLY {
+        int id PK "老人ID"
+        int user_id FK "用户ID"
+        string emergency_contact "紧急联系人"
+        string emergency_phone "紧急联系电话"
+        date birth_date "出生日期"
+        text special_needs "特殊需求"
+        datetime created_at "创建时间"
+        datetime updated_at "更新时间"
+    }
+    
+    CARE_RECORD {
+        int id PK "记录ID"
+        int elderly_id FK "老人ID"
+        int nurse_id FK "护士ID"
+        date record_date "记录日期"
+        string care_type "护理类型"
+        text care_content "护理内容"
+        text vital_signs "生命体征"
+        text emotional_state "情绪状态"
+        text notes "备注"
+        datetime created_at "创建时间"
+    }
+    
+    HEALTH_MONITORING {
+        int id PK "监测ID"
+        int elderly_id FK "老人ID"
+        date record_date "记录日期"
+        decimal blood_pressure_high "收缩压"
+        decimal blood_pressure_low "舒张压"
+        decimal heart_rate "心率"
+        decimal temperature "体温"
+        decimal weight "体重"
+        decimal blood_sugar "血糖"
+        text notes "备注"
+        datetime created_at "创建时间"
+    }
+    
+    ACTIVITY {
+        int id PK "活动ID"
+        string title "活动标题"
+        text description "活动描述"
+        datetime activity_date "活动日期"
+        string location "活动地点"
+        int max_participants "最大参与人数"
+        int admin_id FK "组织管理员ID"
+        enum status "状态(UPCOMING,ONGOING,COMPLETED)"
+        datetime created_at "创建时间"
+    }
+    
+    ACTIVITY_PARTICIPANT {
+        int id PK "参与ID"
+        int activity_id FK "活动ID"
+        int elderly_id FK "老人ID"
+        datetime registration_time "报名时间"
+        enum attendance_status "出勤状态(REGISTERED,ATTENDED,ABSENT)"
+        datetime created_at "创建时间"
+    }
+    
+    %% 实体关系定义
+    USER ||--o| ADMIN : "管理员信息"
+    USER ||--o| NURSE : "护士信息"
+    USER ||--o| ELDERLY : "老人信息"
+    
+    ELDERLY ||--o{ HEALTH_MONITORING : "健康监测"
+    ELDERLY ||--o{ CARE_RECORD : "接受护理"
+    ELDERLY ||--o{ ACTIVITY_PARTICIPANT : "参与活动"
+    
+    NURSE ||--o{ CARE_RECORD : "提供护理"
+    
+    ADMIN ||--o{ ACTIVITY : "组织活动"
+    ACTIVITY ||--o{ ACTIVITY_PARTICIPANT : "活动参与者"

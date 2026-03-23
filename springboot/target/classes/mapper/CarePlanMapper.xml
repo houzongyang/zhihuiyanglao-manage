@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.CarePlanMapper">
+
+    <!-- 结果映射 -->
+    <resultMap id="BaseResultMap" type="com.example.entity.CarePlan">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="user_id" property="userId" jdbcType="INTEGER"/>
+        <result column="plan_title" property="planTitle" jdbcType="VARCHAR"/>
+        <result column="plan_content" property="planContent" jdbcType="LONGVARCHAR"/>
+        <result column="care_level" property="careLevel" jdbcType="VARCHAR"/>
+        <result column="diet_plan" property="dietPlan" jdbcType="LONGVARCHAR"/>
+        <result column="exercise_plan" property="exercisePlan" jdbcType="LONGVARCHAR"/>
+        <result column="start_date" property="startDate" jdbcType="DATE"/>
+        <result column="end_date" property="endDate" jdbcType="DATE"/>
+        <result column="status" property="status" jdbcType="VARCHAR"/>
+        <result column="created_by" property="createdBy" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!-- 扩展结果映射（包含关联查询字段） -->
+    <resultMap id="ExtendedResultMap" type="com.example.entity.CarePlan" extends="BaseResultMap">
+        <result column="user_name" property="userName" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!-- 基础字段列表 -->
+    <sql id="Base_Column_List">
+        id, user_id, plan_title, plan_content, care_level, diet_plan, exercise_plan, 
+        start_date, end_date, status, created_by, create_time, update_time
+    </sql>
+
+    <!-- 扩展字段列表（包含关联查询字段） -->
+    <sql id="Extended_Column_List">
+        cp.id, cp.user_id, cp.plan_title, cp.plan_content, cp.care_level, cp.diet_plan, cp.exercise_plan,
+        cp.start_date, cp.end_date, cp.status, cp.created_by, cp.create_time, cp.update_time,
+        u.name as user_name
+    </sql>
+
+    <!-- 新增护理计划 -->
+    <insert id="insert" parameterType="com.example.entity.CarePlan">
+        insert into care_plan
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="planTitle != null">plan_title,</if>
+            <if test="planContent != null">plan_content,</if>
+            <if test="careLevel != null">care_level,</if>
+            <if test="dietPlan != null">diet_plan,</if>
+            <if test="exercisePlan != null">exercise_plan,</if>
+            <if test="startDate != null">start_date,</if>
+            <if test="endDate != null">end_date,</if>
+            <if test="status != null">status,</if>
+            <if test="createdBy != null">created_by,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId,jdbcType=INTEGER},</if>
+            <if test="planTitle != null">#{planTitle,jdbcType=VARCHAR},</if>
+            <if test="planContent != null">#{planContent,jdbcType=LONGVARCHAR},</if>
+            <if test="careLevel != null">#{careLevel,jdbcType=VARCHAR},</if>
+            <if test="dietPlan != null">#{dietPlan,jdbcType=LONGVARCHAR},</if>
+            <if test="exercisePlan != null">#{exercisePlan,jdbcType=LONGVARCHAR},</if>
+            <if test="startDate != null">#{startDate,jdbcType=DATE},</if>
+            <if test="endDate != null">#{endDate,jdbcType=DATE},</if>
+            <if test="status != null">#{status,jdbcType=VARCHAR},</if>
+            <if test="createdBy != null">#{createdBy,jdbcType=VARCHAR},</if>
+        </trim>
+    </insert>
+
+    <!-- 根据ID删除护理计划 -->
+    <delete id="deleteById" parameterType="java.lang.Integer">
+        delete from care_plan where id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <!-- 批量删除护理计划 -->
+    <delete id="deleteBatch" parameterType="java.util.List">
+        delete from care_plan where id in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!-- 修改护理计划 -->
+    <update id="updateById" parameterType="com.example.entity.CarePlan">
+        update care_plan
+        <set>
+            <if test="userId != null">user_id = #{userId,jdbcType=INTEGER},</if>
+            <if test="planTitle != null">plan_title = #{planTitle,jdbcType=VARCHAR},</if>
+            <if test="planContent != null">plan_content = #{planContent,jdbcType=LONGVARCHAR},</if>
+            <if test="careLevel != null">care_level = #{careLevel,jdbcType=VARCHAR},</if>
+            <if test="dietPlan != null">diet_plan = #{dietPlan,jdbcType=LONGVARCHAR},</if>
+            <if test="exercisePlan != null">exercise_plan = #{exercisePlan,jdbcType=LONGVARCHAR},</if>
+            <if test="startDate != null">start_date = #{startDate,jdbcType=DATE},</if>
+            <if test="endDate != null">end_date = #{endDate,jdbcType=DATE},</if>
+            <if test="status != null">status = #{status,jdbcType=VARCHAR},</if>
+            <if test="createdBy != null">created_by = #{createdBy,jdbcType=VARCHAR},</if>
+            update_time = CURRENT_TIMESTAMP
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <!-- 根据ID查询护理计划 -->
+    <select id="selectById" parameterType="java.lang.Integer" resultMap="ExtendedResultMap">
+        select 
+        <include refid="Extended_Column_List"/>
+        from care_plan cp
+        left join user u on cp.user_id = u.id
+        where cp.id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <!-- 通用查询条件 -->
+    <sql id="selectCondition">
+        <where>
+            <if test="userId != null">
+                and cp.user_id = #{userId}
+            </if>
+            <if test="planTitle != null and planTitle != ''">
+                and cp.plan_title like concat('%', #{planTitle}, '%')
+            </if>
+            <if test="careLevel != null and careLevel != ''">
+                and cp.care_level = #{careLevel}
+            </if>
+            <if test="status != null and status != ''">
+                and cp.status = #{status}
+            </if>
+            <if test="startDate != null">
+                and cp.start_date &gt;= #{startDate}
+            </if>
+            <if test="endDate != null">
+                and cp.end_date &lt;= #{endDate}
+            </if>
+            <if test="createdBy != null and createdBy != ''">
+                and cp.created_by like concat('%', #{createdBy}, '%')
+            </if>
+        </where>
+    </sql>
+
+    <!-- 查询所有护理计划 -->
+    <select id="selectAll" parameterType="com.example.entity.CarePlan" resultMap="ExtendedResultMap">
+        select 
+        <include refid="Extended_Column_List"/>
+        from care_plan cp
+        left join user u on cp.user_id = u.id
+        <include refid="selectCondition"/>
+        order by cp.create_time desc
+    </select>
+
+    <!-- 分页查询护理计划 -->
+    <select id="selectPage" parameterType="com.example.entity.CarePlan" resultMap="ExtendedResultMap">
+        select 
+        <include refid="Extended_Column_List"/>
+        from care_plan cp
+        left join user u on cp.user_id = u.id
+        <include refid="selectCondition"/>
+        order by cp.create_time desc
+    </select>
+
+</mapper>

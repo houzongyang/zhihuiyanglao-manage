@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.BillManagementMapper">
+
+    <sql id="Base_Column_List">
+        id,user_id,user_name,bill_type,related_id,related_name,amount,description,
+        payment_status,generated_date,payment_date,generated_by,created_at,updated_at
+    </sql>
+
+    <select id="selectAll" resultType="com.example.entity.BillManagement">
+        select
+        <include refid="Base_Column_List" />
+        from bill_management
+        <where>
+            <if test="id != null"> and id = #{id}</if>
+            <if test="userId != null"> and user_id = #{userId}</if>
+            <if test="userName != null and userName != ''"> and user_name like concat('%', #{userName}, '%')</if>
+            <if test="billType != null and billType != ''"> and bill_type = #{billType}</if>
+            <if test="relatedId != null"> and related_id = #{relatedId}</if>
+            <if test="relatedName != null and relatedName != ''"> and related_name like concat('%', #{relatedName}, '%')</if>
+            <if test="amount != null"> and amount = #{amount}</if>
+            <if test="description != null and description != ''"> and description like concat('%', #{description}, '%')</if>
+            <if test="paymentStatus != null and paymentStatus != ''"> and payment_status = #{paymentStatus}</if>
+            <if test="generatedDate != null"> and generated_date = #{generatedDate}</if>
+            <if test="paymentDate != null"> and payment_date = #{paymentDate}</if>
+            <if test="generatedBy != null and generatedBy != ''"> and generated_by like concat('%', #{generatedBy}, '%')</if>
+            <!-- 日期范围查询条件 -->
+            <if test="startDate != null and startDate != ''"> and generated_date &gt;= #{startDate}</if>
+            <if test="endDate != null and endDate != ''"> and generated_date &lt;= #{endDate}</if>
+        </where>
+        order by generated_date desc, created_at desc
+    </select>
+
+    <select id="selectById" resultType="com.example.entity.BillManagement">
+        select
+        <include refid="Base_Column_List" />
+        from bill_management
+        where id = #{id}
+    </select>
+
+    <delete id="deleteById">
+        delete from bill_management
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteBatch">
+        delete from bill_management
+        where id in
+        <foreach collection="ids" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <insert id="insert" parameterType="com.example.entity.BillManagement" useGeneratedKeys="true" keyProperty="id">
+        insert into bill_management
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="userName != null">user_name,</if>
+            <if test="billType != null">bill_type,</if>
+            <if test="relatedId != null">related_id,</if>
+            <if test="relatedName != null">related_name,</if>
+            <if test="amount != null">amount,</if>
+            <if test="description != null">description,</if>
+            <if test="paymentStatus != null">payment_status,</if>
+            <if test="generatedDate != null">generated_date,</if>
+            <if test="paymentDate != null">payment_date,</if>
+            <if test="generatedBy != null">generated_by,</if>
+            <if test="createdAt != null">created_at,</if>
+            <if test="updatedAt != null">updated_at,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="userName != null">#{userName},</if>
+            <if test="billType != null">#{billType},</if>
+            <if test="relatedId != null">#{relatedId},</if>
+            <if test="relatedName != null">#{relatedName},</if>
+            <if test="amount != null">#{amount},</if>
+            <if test="description != null">#{description},</if>
+            <if test="paymentStatus != null">#{paymentStatus},</if>
+            <if test="generatedDate != null">#{generatedDate},</if>
+            <if test="paymentDate != null">#{paymentDate},</if>
+            <if test="generatedBy != null">#{generatedBy},</if>
+            <if test="createdAt != null">#{createdAt},</if>
+            <if test="updatedAt != null">#{updatedAt},</if>
+        </trim>
+    </insert>
+
+    <insert id="batchInsert" parameterType="java.util.List">
+        insert into bill_management (
+            user_id, user_name, bill_type, related_id, related_name, 
+            amount, description, payment_status, generated_date, 
+            payment_date, generated_by, created_at, updated_at
+        ) values
+        <foreach collection="list" item="item" separator=",">
+            (
+                #{item.userId}, #{item.userName}, #{item.billType}, 
+                #{item.relatedId}, #{item.relatedName}, #{item.amount}, 
+                #{item.description}, #{item.paymentStatus}, #{item.generatedDate}, 
+                #{item.paymentDate}, #{item.generatedBy}, #{item.createdAt}, #{item.updatedAt}
+            )
+        </foreach>
+    </insert>
+
+    <update id="updateById" parameterType="com.example.entity.BillManagement">
+        update bill_management
+        <set>
+            <if test="userId != null">
+                user_id = #{userId},
+            </if>
+            <if test="userName != null">
+                user_name = #{userName},
+            </if>
+            <if test="billType != null">
+                bill_type = #{billType},
+            </if>
+            <if test="relatedId != null">
+                related_id = #{relatedId},
+            </if>
+            <if test="relatedName != null">
+                related_name = #{relatedName},
+            </if>
+            <if test="amount != null">
+                amount = #{amount},
+            </if>
+            <if test="description != null">
+                description = #{description},
+            </if>
+            <if test="paymentStatus != null">
+                payment_status = #{paymentStatus},
+            </if>
+            <if test="generatedDate != null">
+                generated_date = #{generatedDate},
+            </if>
+            <if test="paymentDate != null">
+                payment_date = #{paymentDate},
+            </if>
+            <if test="generatedBy != null">
+                generated_by = #{generatedBy},
+            </if>
+            <if test="updatedAt != null">
+                updated_at = #{updatedAt},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+</mapper>
